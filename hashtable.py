@@ -3,6 +3,8 @@ class My_hash:
     def __init__(self):
         self.__size = 47
         self.__data = [[] for i in range(0, self.__size)]
+        self.__setitem__ = self.a
+        self.__getitem__ = self.g
 
     def a(self, key, val):
         """ insert an element """
@@ -27,8 +29,7 @@ class My_hash:
         for i in self.__data[index]:
             if i[0] == key:
                 return i[1]
-        print 'ERROR !'
-        return -1
+        raise KeyError()
 
     def __hash_function(self, key):
         res = 0
@@ -58,6 +59,18 @@ def main():
     h.a('foo', 'mux')
     assert(h.g('foo') == 'mux')
 
+    # test 4 - empty key
+    h = My_hash()
+    try:
+        h.g('foo')
+        assert('should have' == 'raised an exception')
+    except KeyError:
+        assert('raised :)' == 'raised :)')
+
+    # test 5 - overload operators
+    h = My_hash()
+    h['foo'] = 'hello'
+    assert(h['foo'] == 'hello')
 
 if __name__ == '__main__':
     main()
