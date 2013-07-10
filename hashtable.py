@@ -3,13 +3,12 @@ class My_hash:
     def __init__(self):
         self.__size = 47
         self.__data = [[] for i in range(0, self.__size)]
-        self.__setitem__ = self.a
-        self.__getitem__ = self.g
+        self.__setitem__ = self.__a
+        self.__getitem__ = self.__g
 
-    def a(self, key, val):
+    def __a(self, key, val):
         """ insert an element """
         index = self.__hash_function(key) % self.__size
-        print 'insert [%s] = <%s> index: %d' % (key, val, index)
         pos = -1
         for ind, i in enumerate(self.__data[index]):
             if i[0] == key:
@@ -22,10 +21,9 @@ class My_hash:
             # add an entry
             self.__data[index].append((key, val))
 
-    def g(self, key):
+    def __g(self, key):
         """ retrieve an element """
         index = self.__hash_function(key) % self.__size
-        print 'retrieve [%s] index: %d len: %d' % (key, index, len(self.__data[index]))
         for i in self.__data[index]:
             if i[0] == key:
                 return i[1]
@@ -40,37 +38,32 @@ class My_hash:
 def main():
     # test 1 - insert + retrieve
     h = My_hash()
-    h.a('i_am_the_key', 'i_am_the_value');
-    assert(h.g('i_am_the_key') == 'i_am_the_value')
+    h['i_am_the_key'] = 'i_am_the_value'
+    assert(h['i_am_the_key'] == 'i_am_the_value')
 
     # test 2 - collision
     h = My_hash()
-    h.a('db', 'val 1')
-    h.a('fa', 'val 2')
-    assert(h.g('fa') == 'val 2')
-    assert(h.g('db') == 'val 1')
+    h['db'] = 'val 1'
+    h['fa'] = 'val 2'
+    assert(h['fa'] == 'val 2')
+    assert(h['db'] == 'val 1')
 
     # test 3 - modification
     h = My_hash()
-    h.a('foo', 'bar')
-    assert(h.g('foo') == 'bar')
-    h.a('foo', 'baz')
-    assert(h.g('foo') == 'baz')
-    h.a('foo', 'mux')
-    assert(h.g('foo') == 'mux')
+    h['foo'] = 'bar'
+    assert(h['foo'] == 'bar')
+    h['foo'] = 'baz'
+    assert(h['foo'] == 'baz')
+    h['foo'] = 'mux'
+    assert(h['foo'] == 'mux')
 
     # test 4 - empty key
     h = My_hash()
     try:
-        h.g('foo')
+        h['foo']
         assert('should have' == 'raised an exception')
     except KeyError:
         assert('raised :)' == 'raised :)')
-
-    # test 5 - overload operators
-    h = My_hash()
-    h['foo'] = 'hello'
-    assert(h['foo'] == 'hello')
 
 if __name__ == '__main__':
     main()
